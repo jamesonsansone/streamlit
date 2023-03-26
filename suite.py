@@ -6,12 +6,12 @@ import streamlit as st
 # Function to generate description using OpenAI API
 def generate_description(keyword):
     openai.api_key = os.getenv("OPENAI_API_KEY")
-    prompt = f"Write a short, NLP-friendly description of the keyword: {keyword}"
+    prompt = f"Imagine you are an expert search marketer. You know exactly how to formulate text in a way that is easy for search engines to read and understand. You are great at earning featured snippets for the websites you work on. Write a short, NLP-friendly description of the keyword.: {keyword}"
 
     response = openai.Completion.create(
         engine="davinci",
         prompt=prompt,
-        max_tokens=50,
+        max_tokens=500,
         n=1,
         stop=None,
         temperature=0.7,
