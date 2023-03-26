@@ -1,5 +1,3 @@
-pip install streamlit
-
 import os
 import pandas as pd
 import openai
