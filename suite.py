@@ -9,7 +9,7 @@ def generate_description(keyword):
     prompt = f"Write a short, NLP-friendly description of the keyword: {keyword}"
 
     response = openai.Completion.create(
-        engine="davinci-codex",
+        engine="davinci",
         prompt=prompt,
         max_tokens=50,
         n=1,
