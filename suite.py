@@ -43,7 +43,7 @@ if uploaded_file is not None and api_key:
 
         keywords_df['description'] = descriptions
 
-        st.write(keywords_df)
+        # Removed st.write(keywords_df) to stop displaying the results in a table
 
         st.download_button(
             label="Download CSV with Descriptions",
