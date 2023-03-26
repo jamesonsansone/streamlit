@@ -3,15 +3,33 @@ import pandas as pd
 import openai
 import streamlit as st
 
-# Include the generate_description function and other necessary functions from the previous code snippet
+# Function to generate description using OpenAI API
+def generate_description(keyword):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    prompt = f"Write a short, NLP-friendly description of the keyword: {keyword}"
 
-os.environ["OPENAI_API_KEY"] = "your_api_key_here"
+    response = openai.Completion.create(
+        engine="davinci-codex",
+        prompt=prompt,
+        max_tokens=50,
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
+
+    description = response.choices[0].text.strip()
+    return description
 
 st.title("Featured Snippet Optimization Tool")
 
+# Input field for OpenAI API key
+api_key = st.text_input("Enter your OpenAI API key:")
+if api_key:
+    os.environ["OPENAI_API_KEY"] = api_key
+
 uploaded_file = st.file_uploader("Upload a CSV file containing keywords:", type=['csv'])
 
-if uploaded_file is not None:
+if uploaded_file is not None and api_key:
     keywords_df = pd.read_csv(uploaded_file)
 
     if st.button("Generate Descriptions"):
@@ -33,5 +51,3 @@ if uploaded_file is not None:
             file_name="keywords_with_descriptions.csv",
             mime="text/csv",
         )
-        
-        
