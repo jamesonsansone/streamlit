@@ -19,7 +19,7 @@ if uploaded_file is not None:
 
         descriptions = []
 
-        for keyword in keywords_df['keyword']:
+        for keyword in keywords_df['Keyword']:
             description = generate_description(keyword)
             descriptions.append(description)
 
