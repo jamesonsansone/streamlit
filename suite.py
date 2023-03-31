@@ -18,7 +18,8 @@ if uploaded_file is not None:
         #function to clean up CSV
         columns_to_keep = ["Keyword", "Volume", "Current URL"]
         df_new = keywords_df[columns_to_keep]
-        # Removed st.write(keywords_df) to stop displaying the results in a table
+        st.write(df_new)
+
 
         st.download_button(
             label="Download CSV with Descriptions",
