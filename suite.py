@@ -37,13 +37,13 @@ uploaded_file = st.file_uploader("Upload a CSV file containing keywords:", type=
 if uploaded_file is not None #and api_key#:
     keywords_df = pd.read_csv(uploaded_file)
     
-    #function to clean up CSV
-    columns_to_keep = ["Keyword", "Volume", "Current URL"]
-    df_new = keywords_df[columns_to_keep]
-    
    
-   # if st.button("Generate Descriptions"):
-   #    st.write("Generating NLP-friendly descriptions for your keywords...")
+   if st.button("Generate Descriptions"):
+        st.write("Generating NLP-friendly descriptions for your keywords...")
+        
+        #function to clean up CSV
+        columns_to_keep = ["Keyword", "Volume", "Current URL"]
+        df_new = keywords_df[columns_to_keep]
 
     #    descriptions = []
 
