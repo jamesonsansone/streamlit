@@ -34,7 +34,7 @@ if api_key:
 
 uploaded_file = st.file_uploader("Upload a CSV file containing keywords:", type=['csv'])
 
-if uploaded_file is not None and api_key:
+if uploaded_file is not None #and api_key#:
     keywords_df = pd.read_csv(uploaded_file)
     
     #function to clean up CSV
