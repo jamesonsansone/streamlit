@@ -1,3 +1,7 @@
 streamlit
+beautifulsoup4
+tldextract
 pandas
-tldextract)
+requests
+spacy
+gensim
