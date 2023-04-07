@@ -92,8 +92,7 @@ st.title('Screaming Frog Content Similarity Analysis')
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
 
 if uploaded_file:
-    content_column = st.text_input("Enter the name of the column holding the extracted content:", value="BodyContent 1")
-    if st.button("Process"):
-        st.write("Processing...")
-        with st.spinner("Processing the CSV file..."):
-            df_result = process_input
+    content_column = "Article_Text"
+    df_result = process_input_file(uploaded_file, content_column)
+    # You can display the resulting DataFrame or handle it as needed
+    st.write(df_result)
