@@ -90,6 +90,7 @@ def process_input_file(file, content_column):
 
     return df_comp
 
+
 st.title('Screaming Frog Content Similarity Analysis')
 
 uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
@@ -99,14 +100,12 @@ if uploaded_file:
     df_result = process_input_file(uploaded_file, content_column)
     # You can display the resulting DataFrame or handle it as needed
     st.write(df_result)
-# You can display the resulting DataFrame or handle it as needed
-st.write(df_result)
 
-# Add the export button
-csv_export = df_result.to_csv(index=False)
-st.download_button(
-    label="Download CSV file",
-    data=csv_export,
-    file_name="content_similarity_results.csv",
-    mime="text/csv",
-)
+    # Add the export button
+    csv_export = df_result.to_csv(index=False)
+    st.download_button(
+        label="Download CSV file",
+        data=csv_export,
+        file_name="content_similarity_results.csv",
+        mime="text/csv",
+    )
