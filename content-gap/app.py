@@ -5,8 +5,10 @@ from urllib.parse import urlparse
 
 # Function to extract domain from URL
 def extract_domain(url):
+    if not url or not isinstance(url, str):
+        return None
     parsed_uri = urlparse(url)
-    domain = '{uri.netloc}'.format(uri=parsed_uri)
+    domain = tldextract.extract(parsed_uri.netloc).domain
     return domain
 
 # Function to process input CSVs
