@@ -73,7 +73,7 @@ def process_input_file(file, content_column):
 
     for i, row in tqdm(df.iterrows(), total=df.shape[0]):
         text = row[content_col]
-        url = row['address']
+        url = row['Address']
         default = "Maecenas vestibulum euismod dui id scelerisque."
 
         if isinstance(text, str) and len(text.split()) > 5:
