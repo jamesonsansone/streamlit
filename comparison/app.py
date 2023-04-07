@@ -62,8 +62,11 @@ def apply_shingled(row, urls, shingles):
 def process_input_file(file, content_column):
     df = pd.read_csv(file)
 
-    df.columns = [c.lower() for c in df.columns]
+    df.columns = [c.lower().strip() for c in df.columns]  # Add this line to clean up the column names
     content_col = content_column.lower()
+
+    # Print the columns for debugging
+    st.write("Columns in the DataFrame:", df.columns)
 
     df = df[df[content_col] == df[content_col]]
     df.reset_index(drop=True, inplace=True)
