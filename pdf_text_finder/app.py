@@ -5,15 +5,17 @@ import pandas as pd
 from io import BytesIO
 from typing import List
 
-def analyze_pdf(file_content: bytes, keywords: List[str]) -> bool:
+def analyze_pdf(file_content: bytes, keywords: List[str]) -> dict:
     with BytesIO(file_content) as f:
         doc = fitz.open(stream=f)
         text = "\n\n".join(page.get_text("text").lower() for page in doc)
 
+    keyword_counts = {}
     for word in keywords:
-        if word.lower() in text:
-            return True
-    return False
+        count = text.lower().count(word.lower())
+        keyword_counts[word] = count
+
+    return keyword_counts
 
 st.title('PDF Keyword Scanner')
 
@@ -32,14 +34,15 @@ if keywords_input:
     keywords = [k.strip() for k in keywords_input.split(',')]
 
 if uploaded_file and keywords_input:
-    matching_pdfs = []
+    for keyword in keywords:
+        df[keyword] = 0
 
-    for pdf_url in pdf_urls:
+    for idx, pdf_url in enumerate(pdf_urls):
         response = requests.get(pdf_url)
         if response.status_code == 200:
-            if analyze_pdf(response.content, keywords):
-                matching_pdfs.append(pdf_url)
+            keyword_counts = analyze_pdf(response.content, keywords)
+            for keyword, count in keyword_counts.items():
+                df.at[idx, keyword] = count
 
-    st.subheader("PDFs containing target keywords:")
-    for pdf_url in matching_pdfs:
-        st.write(pdf_url)
+    st.subheader("PDFs with target keyword counts:")
+    st.write(df)
