@@ -1,12 +1,14 @@
 import streamlit as st
 import requests
-import pdftotext
+import fitz  # PyMuPDF
 import pandas as pd
 from io import BytesIO
+from typing import List
 
 def analyze_pdf(file_content: bytes, keywords: List[str]) -> bool:
-    pdf = pdftotext.PDF(BytesIO(file_content))
-    text = "\n\n".join(pdf).lower()
+    with BytesIO(file_content) as f:
+        doc = fitz.open(stream=f)
+        text = "\n\n".join(page.get_text("text").lower() for page in doc)
 
     for word in keywords:
         if word.lower() in text:
