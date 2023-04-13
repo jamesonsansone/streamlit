@@ -43,5 +43,9 @@ if st.button("Compare Rankings"):
             pivot_df.to_csv("keyword_rankings_comparison.csv", index=False)
             st.markdown("[Download CSV](keyword_rankings_comparison.csv)")
 
+        not_highest_df = pivot_df[pivot_df['Featured Highest'] == False].sort_values(by='Volume', ascending=False)
+        st.subheader("Featured Domain not Highest")
+        st.write(not_highest_df)
+
     else:
         st.write("Please upload the required CSV files.")
