@@ -25,6 +25,23 @@ def process_csv(uploaded_file, domain_col_name):
 st.title("Keyword Rankings Comparison")
 
 featured_file = st.file_uploader("Upload a CSV file for Featured Domain:", type=['csv'])
+
+# Use a list to store competitor file uploaders
+competitor_files = []
+for i in range(1, 5):  # Change the range to add more competitors
+    competitor_file = st.file_uploader(f"Upload a CSV file for Competitor {i} Domain:", type=['csv'])
+    competitor_files.append(competitor_file)
+
+if st.button("Compare Rankings"):
+    featured_df = process_csv(featured_file, 'Featured Domain')
+    
+    if featured_df is not None:
+        # Initialize
+
+
+st.title("Keyword Rankings Comparison")
+
+featured_file = st.file_uploader("Upload a CSV file for Featured Domain:", type=['csv'])
 comp1_file = st.file_uploader("Upload a CSV file for Competitor 1 Domain:", type=['csv'])
 comp2_file = st.file_uploader("Upload a CSV file for Competitor 2 Domain:", type=['csv'])
 comp3_file = st.file_uploader("Upload a CSV file for Competitor 3 Domain:", type=['csv'])
