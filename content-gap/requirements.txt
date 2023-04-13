@@ -5,3 +5,4 @@ pandas
 requests
 spacy
 gensim
+tldextract==3.1.3
