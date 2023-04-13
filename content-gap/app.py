@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import re
+import tldextract
 from urllib.parse import urlparse
 
 # Function to extract domain from URL
