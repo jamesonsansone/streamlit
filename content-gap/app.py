@@ -1,10 +1,8 @@
 import streamlit as st
 import pandas as pd
-import re
 import tldextract
 from urllib.parse import urlparse
 
-# Function to extract domain from URL
 def extract_domain(url):
     if not url or not isinstance(url, str):
         return None
@@ -12,11 +10,9 @@ def extract_domain(url):
     domain = tldextract.extract(parsed_uri.netloc).domain
     return domain
 
-# Function to process input CSVs
 def process_csv(uploaded_file, domain_col_name):
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
-        df = df[['Keyword', 'Volume', 'KD', 'Current position', 'Current URL']]
         df['Domain'] = df['Current URL'].apply(extract_domain)
         df = df.rename(columns={'Current position': domain_col_name})
         return df
@@ -26,30 +22,26 @@ def process_csv(uploaded_file, domain_col_name):
 st.title("Keyword Rankings Comparison")
 
 featured_file = st.file_uploader("Upload a CSV file for Featured Domain:", type=['csv'])
-
-# Use a list to store competitor file uploaders
-competitor_files = []
-for i in range(1, 5):  # Change the range to add more competitors
-    competitor_file = st.file_uploader(f"Upload a CSV file for Competitor {i} Domain:", type=['csv'])
-    competitor_files.append(competitor_file)
+comp_files = [st.file_uploader(f"Upload a CSV file for Competitor {i + 1} Domain:", type=['csv']) for i in range(4)]
 
 if st.button("Compare Rankings"):
     featured_df = process_csv(featured_file, 'Featured Domain')
-    
-    if featured_df is not None:
-        # Initialize the combined_df with featured_df
-        combined_df = featured_df
+    comp_dfs = [process_csv(comp_file, f'Competitor {i + 1}') for i, comp_file in enumerate(comp_files) if comp_file is not None]
 
-        # Process and concatenate each competitor file
-        for i, comp_file in enumerate(competitor_files, start=1):
-            comp_df = process_csv(comp_file, f'Competitor {i}')
-            
-            if comp_df is not None:
-                combined_df = pd.concat([combined_df, comp_df], axis=0)
-
+    if featured_df is not None and len(comp_dfs) > 0:
+        all_dfs = [featured_df] + comp_dfs
+        combined_df = pd.concat(all_dfs, axis=0)
         combined_df = combined_df.groupby(['Keyword', 'Volume', 'Domain']).agg(Avg_Current_Position=('Featured Domain', 'mean')).reset_index()
         pivot_df = combined_df.pivot_table(index=['Keyword', 'Volume'], columns='Domain', values='Avg_Current_Position').reset_index()
 
+        pivot_df['# of Ranking Domains'] = pivot_df.iloc[:, 2:].apply(lambda x: (x <= 20).sum(), axis=1)
+        pivot_df['Featured Highest'] = pivot_df.apply(lambda x: x[2] == min(x[2:2 + len(all_dfs)]), axis=1)
+
         st.write(pivot_df)
+
+        if st.button("Export to CSV"):
+            pivot_df.to_csv("keyword_rankings_comparison.csv", index=False)
+            st.markdown("[Download CSV](keyword_rankings_comparison.csv)")
+
     else:
-        st.write("Please upload the required CSV file for Featured Domain.")
+        st.write("Please upload the required CSV files.")
