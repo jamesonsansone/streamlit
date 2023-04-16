@@ -3,6 +3,27 @@ import pandas as pd
 import tldextract
 from urllib.parse import urlparse
 
+def extract_domain(url):
+    if not url or not isinstance(url, str):
+        return None
+    parsed_uri = urlparse(url)
+    domain = tldextract.extract(parsed_uri.netloc).domain
+    return domain
+
+def process_csv(uploaded_file, domain_col_name):
+    if uploaded_file is not None:
+        df = pd.read_csv(uploaded_file)
+        df['Domain'] = df['Current URL'].apply(extract_domain)
+        df = df.rename(columns={'Current position': domain_col_name})
+        return df
+    else:
+        return None
+
+st.title("Keyword Rankings Comparison")
+
+featured_file = st.file_uploader("Upload a CSV file for Featured Domain:", type=['csv'])
+comp_files = [st.file_uploader(f"Upload a CSV file for Competitor {i + 1} Domain:", type=['csv']) for i in range(4)]
+
 if st.button("Compare Rankings"):
     featured_df = process_csv(featured_file, 'Featured Domain')
     comp_dfs = [process_csv(comp_file, f'Competitor {i + 1}') for i, comp_file in enumerate(comp_files) if comp_file is not None]
