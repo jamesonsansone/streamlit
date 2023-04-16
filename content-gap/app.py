@@ -1,3 +1,8 @@
+import streamlit as st
+import pandas as pd
+import tldextract
+from urllib.parse import urlparse
+
 if st.button("Compare Rankings"):
     featured_df = process_csv(featured_file, 'Featured Domain')
     comp_dfs = [process_csv(comp_file, f'Competitor {i + 1}') for i, comp_file in enumerate(comp_files) if comp_file is not None]
