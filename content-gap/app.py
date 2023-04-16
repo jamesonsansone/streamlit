@@ -29,4 +29,4 @@ if st.button("Compare Rankings"):
         st.write(not_highest_df)
 
     else:
-        st.write("Please upload the required CSV files."
+        st.write("Please upload the required CSV files.")
