@@ -34,6 +34,9 @@ if st.button("Compare Rankings"):
         combined_df = combined_df.groupby(['Keyword', 'Volume', 'Domain']).agg(Avg_Current_Position=('Featured Domain', 'mean')).reset_index()
         pivot_df = combined_df.pivot_table(index=['Keyword', 'Volume'], columns='Domain', values='Avg_Current_Position').reset_index()
 
+        domain_columns = [df['Domain'].iloc[0] for df in all_dfs]
+        pivot_df.columns = ['Keyword', 'Volume'] + domain_columns
+
         pivot_df['# of Ranking Domains'] = pivot_df.iloc[:, 2:].apply(lambda x: (x <= 20).sum(), axis=1)
         pivot_df['Featured Highest'] = pivot_df.apply(lambda x: x[2] == min(x[2:2 + len(all_dfs)]), axis=1)
 
