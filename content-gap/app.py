@@ -33,19 +33,19 @@ if st.button("Compare Rankings"):
         combined_df = pd.concat(all_dfs, axis=0)
         combined_df = combined_df.groupby(['Keyword', 'Volume', 'Domain']).agg(Avg_Current_Position=('Featured Domain', 'mean')).reset_index()
         pivot_df = combined_df.pivot_table(index=['Keyword', 'Volume'], columns='Domain', values='Avg_Current_Position').reset_index()
+        pivot_df.columns.name = None
 
         domain_columns = [df['Domain'].iloc[0] for df in all_dfs]
-        
-        print("domain_columns:", domain_columns)
-        print("pivot_df columns:", pivot_df.columns)
-
-        pivot_df.columns = ['Keyword', 'Volume'] + domain_columns
 
         st.write("domain_columns:", domain_columns)
         st.write("pivot_df columns:", pivot_df.columns)
 
-        pivot_df = pivot_df.reset_index(drop=True)
-        pivot_df.columns = ['Keyword', 'Volume'] + domain_columns
+        columns_mapping = {('Keyword', ''): 'Keyword', ('Volume', ''): 'Volume'}
+        for domain in domain_columns:
+            columns_mapping[(domain, 'Avg_Current_Position')] = domain
+
+        pivot_df = pivot_df.rename(columns=columns_mapping)
+
 
 
         if st.button("Export to CSV"):
