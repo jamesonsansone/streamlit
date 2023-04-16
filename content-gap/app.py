@@ -38,7 +38,7 @@ if st.button("Compare Rankings"):
         pivot_df.columns = ['Keyword', 'Volume'] + domain_columns
 
         pivot_df['# of Ranking Domains'] = pivot_df.iloc[:, 2:].apply(lambda x: (x <= 20).sum(), axis=1)
-        pivot_df['Featured Highest'] = pivot_df.apply(lambda x: x[2] == min(x[2:2 + len(all_dfs)]), axis=1)
+        pivot_df['Featured Highest'] = pivot_df.apply(lambda x: x[2] == min(x[2:len(domain_columns) + 2]), axis=1)
 
         st.write(pivot_df)
 
