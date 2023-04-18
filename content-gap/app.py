@@ -2,6 +2,15 @@ import streamlit as st
 import pandas as pd
 import tldextract
 from urllib.parse import urlparse
+import base64
+import io
+
+# This function creates a download link for the CSV.
+def create_download_link(df, filename):
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}">Download {filename}</a>'
+    return href
 
 # This function takes a URL string as input and extracts the domain from it.
 def extract_domain(url):
@@ -62,12 +71,13 @@ if st.button("Compare Rankings"):
                  
         # Display the resulting pivot table.
         st.write(pivot_df)
-        
-        
+
         # Allow the user to export the pivot table as a CSV file.
         if st.button("Export Main Table to CSV"):
-            pivot_df.to_csv("keyword_rankings_comparison.csv", index=False)
-            st.markdown("[Download Main Table CSV](keyword_rankings_comparison.csv)")
+            st.session_state.export_main = True
+
+        if st.session_state.export_main:
+            st.markdown(create_download_link(pivot_df, "keyword_rankings_comparison.csv"), unsafe_allow_html=True)
 
         # Display the keywords and volumes where the featured domain is not the lowest-ranking.
         not_lowest_df = pivot_df[pivot_df['Is the Featured Domain the lowest ranking keyword'] == False].sort_values(by='Volume', ascending=False)
@@ -76,6 +86,7 @@ if st.button("Compare Rankings"):
 
         # Allow the user to export the not_lowest_df as a separate CSV file.
         if st.button("Export Featured Domain not Lowest Table to CSV"):
-            not_lowest_df.to_csv("featured_domain_not_lowest.csv", index=False)
-            st.markdown("[Download Featured Domain not Lowest Table CSV](featured_domain_not_lowest.csv)")
+            st.session_state.export_not_lowest = True
 
+        if st.session_state.export_not_lowest:
+            st.markdown(create_download_link(not_lowest_df, "featured_domain_not_lowest.csv"), unsafe_allow_html=True)
