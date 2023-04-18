@@ -62,16 +62,20 @@ if st.button("Compare Rankings"):
                  
         # Display the resulting pivot table.
         st.write(pivot_df)
-
+        
+        
         # Allow the user to export the pivot table as a CSV file.
-        if st.button("Export to CSV"):
+        if st.button("Export Main Table to CSV"):
             pivot_df.to_csv("keyword_rankings_comparison.csv", index=False)
-            st.markdown("[Download CSV](keyword_rankings_comparison.csv)")
+            st.markdown("[Download Main Table CSV](keyword_rankings_comparison.csv)")
 
         # Display the keywords and volumes where the featured domain is not the lowest-ranking.
         not_lowest_df = pivot_df[pivot_df['Is the Featured Domain the lowest ranking keyword'] == False].sort_values(by='Volume', ascending=False)
         st.subheader("Featured Domain not Lowest")
         st.write(not_lowest_df)
 
-    else:
-        st.write("Please upload the required CSV files.")
+        # Allow the user to export the not_lowest_df as a separate CSV file.
+        if st.button("Export Featured Domain not Lowest Table to CSV"):
+            not_lowest_df.to_csv("featured_domain_not_lowest.csv", index=False)
+            st.markdown("[Download Featured Domain not Lowest Table CSV](featured_domain_not_lowest.csv)")
+
