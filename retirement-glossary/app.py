@@ -1,15 +1,9 @@
 import streamlit as st
 import openai
-from dotenv import load_dotenv
-import os
 
-os.environ['OPENAI_API_KEY'] #calling the environment variable
-
-load_dotenv()
-client = OpenAI()
-
-# Assuming you have set your OpenAI API key in your environment variables
+# Set the OpenAI API key using Streamlit secrets
 openai.api_key = st.secrets["OPENAI_API_KEY"]
+
 
 def generate_content(keyword):
     """
