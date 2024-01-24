@@ -13,11 +13,11 @@ def generate_content(keyword):
         messages=[
             {
                 "role": "system",
-                "content": "You are an advanced content generation assistant specialized in creating structured, SEO-optimized articles. Your responses should be formal, authoritative, and informative. Each response should be well-organized with a clear introduction, followed by logically structured sections with headings and subheadings focused on the main keyword. Include relevant keywords and related SEO queries naturally throughout the text. Ensure the content is suitable for a broad audience seeking information online."
+                "content": "You are an advanced content generation assistant specialized in creating structured, SEO-optimized articles. Your responses should be formal, authoritative, and informative. Each response should be well-organized with a clear introduction, followed by logically structured sections with headings and subheadings focused on the main keyword. Include relevant keywords and related SEO queries naturally throughout the text. Ensure the content is suitable for a broad audience seeking information online. Generate an article with Markdown formatted headings. Use '#' for main titles (h1) and '##' for subtitles (h2)."
             },
             {
                 "role": "user",
-                "content": f"Write an informative and comprehensive article about '{keyword}'. The article should include an introduction to the topic, a detailed breakdown, and incorporate related SEO queries within the text. The headlines and subheadings should focus on the main keyword. Keep the text between 750 to 1500 characters."
+                "content": f"Write an informative and comprehensive article about '{keyword}'. The article should include an introduction to the topic, a detailed breakdown, and incorporate related SEO queries within the text. The headlines and subheadings should focus on the main keyword. Keep the text between 750 to 1500 characters. Include Markdown-formatted headings."
             }
         ]
     )
@@ -33,4 +33,4 @@ keyword = st.text_input("Enter a Keyword", "")
 if st.button("Generate Content"):
     with st.spinner("Generating content..."):
         generated_content = generate_content(keyword)
-        st.write(generated_content)
+        st.markdown(generated_content, unsafe_allow_html=True)
