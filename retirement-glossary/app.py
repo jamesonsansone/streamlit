@@ -1,9 +1,8 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 
-# Set the OpenAI API key using Streamlit secrets
-openai.api_key = st.secrets["OPENAI_API_KEY"]
-
+# Initialize the OpenAI client with the API key from Streamlit secrets
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 def generate_content(keyword):
     """
