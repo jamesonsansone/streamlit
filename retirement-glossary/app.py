@@ -24,7 +24,7 @@ def generate_content(keyword):
     return response.choices[0].message.content
 
 # Streamlit interface
-st.title("SEO-Optimized Content Generator")
+st.title("Retirement Glossary Generator")
 
 # User input for keyword
 keyword = st.text_input("Enter a Keyword", "")
