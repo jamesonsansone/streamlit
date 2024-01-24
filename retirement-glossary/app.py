@@ -13,11 +13,11 @@ def generate_content(keyword):
         messages=[
             {
                 "role": "system",
-                "content": "You are an advanced content generation assistant specialized in creating structured, SEO-optimized articles. Your responses should be formal, authoritative, and informative. Each response should be well-organized with a clear introduction, followed by logically structured sections with headings and subheadings focused on the main keyword. Include relevant keywords and related SEO queries naturally throughout the text. Ensure the content is suitable for a broad audience seeking information online. Generate an article with Markdown formatted headings. Use '#' for main titles (h1) and '##' for subtitles (h2)."
+                "content": "You are a content generation assistant, expert in creating SEO-optimized articles with a focus on SEO. Your client is a FinTech 401(k) retirement benefit provider needing your help to write content for a new retirement glossary. Articles should be structured, authoritative similar to a glossary set of terms. Use Markdown for formatting, with '#' for main titles and '##' for subtitles. Ensure articles are concise, engaging, and no more than 1500 characters. Do not include conclusion paragraphs."
             },
             {
                 "role": "user",
-                "content": f"Write an informative and comprehensive article about '{keyword}'. The article should include an introduction to the topic, a detailed breakdown, and incorporate related SEO queries within the text. The headlines and subheadings should focus on the main keyword. Keep the text between 750 to 1500 characters. Include Markdown-formatted headings."
+                "content": f"Write an informative and comprehensive article about '{keyword}'. The article should include an introduction to the topic, a detailed breakdown, and incorporate related SEO queries within the text. The headlines and subheadings should focus on content semantically related to '{keyword}'. Write content in a way that matches natural language processing. Keep the text between 750 to 1500 characters. Include Markdown-formatted headings. The first heading should be 'What is '{keyword}''"
             }
         ]
     )
