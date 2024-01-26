@@ -5,7 +5,7 @@ import pprint
 import base64
 
 # Streamlit interface for keyword input
-st.title("Updated - Retirement Glossary Generator")
+st.title("Update2 - Retirement Glossary Generator")
 keyword = st.text_input("Enter a keyword", "")
 
 # Button to trigger the Data for SEO API call
