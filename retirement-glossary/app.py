@@ -1,81 +1,36 @@
 import streamlit as st
-import requests
-import json
-import base64
+from openai import OpenAI
 
-# Streamlit interface for keyword input
-st.title("Updated - Retirement Glossary Generator")
-keyword = st.text_input("Enter a keyword", "")
+# Initialize the OpenAI client with the API key from Streamlit secrets
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# Button to trigger the Data for SEO API call
-if st.button("Generate Data For SEO"):
-    if not keyword:
-        st.warning("Please enter a keyword.")
-    else:
-        # Authentication
-        login = st.secrets["DATAFORSEO_LOGIN"]
-        password = st.secrets["DATAFORSEO_PASSWORD"]
-        credentials = f"{login}:{password}"
-        encoded_credentials = base64.b64encode(credentials.encode()).decode()
-
-        # Headers
-        headers = {
-            "Authorization": f"Basic {encoded_credentials}",
-            "Content-Type": "application/json"
-        }
-
-        # Set up POST data for creating a task with user-inputted keyword
-        task_post_data = json.dumps({
-            0: {
-                "language_code": "en",
-                "location_code": 2840,
-                "keyword": keyword,
-                "calculate_rectangles": True
+def generate_content(keyword):
+    """
+    Generate content based on the given keyword.
+    """
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a content generation assistant, expert in creating SEO-optimized articles with a focus on SEO. Your client is a FinTech 401(k) retirement benefit provider needing your help to write content for a new retirement glossary. Articles should be structured, authoritative similar to a glossary set of terms. Use Markdown for formatting, with '#' for main titles and '##' for subtitles. Ensure articles are concise, engaging, and no more than 1500 characters. Do not include conclusion paragraphs."
+            },
+            {
+                "role": "user",
+                "content": f"Write an informative and comprehensive article about '{keyword}'. The article should include an introduction to the topic, a detailed breakdown, and incorporate related SEO queries within the text. The headlines and subheadings should focus on content semantically related to '{keyword}'. Write content in a way that matches natural language processing. Keep the text between 750 to 1500 characters. Include Markdown-formatted headings. The first heading should be 'What is '{keyword}''"
             }
-        })
+        ]
+    )
+    return response.choices[0].message.content
 
-        # API Endpoints
-        task_url = "https://sandbox.dataforseo.com/v3/serp/google/organic/live/advanced"
-        task_response = requests.post(task_url, headers=headers, data=task_post_data)
-        
-        # Check response status and process data
-        if task_response.status_code == 200:
-            task_response_data = task_response.json()
-            task_id = task_response_data['tasks'][0]['id']
+# Streamlit interface
+st.title("Retirement Glossary Generator")
 
-            # API Endpoint for retrieving task results
-            results_url = f"https://sandbox.dataforseo.com/v3/serp/google/organic/task_get/advanced/{task_id}"
+# User input for keyword
+keyword = st.text_input("Enter a Keyword", "")
 
-            # Send GET Request to retrieve results
-            results_response = requests.get(results_url, headers=headers)
-
-            try:
-                if results_response.status_code == 200:
-                    results_response_data = results_response.json()
-                    st.write("Debugging Response Data:", results_response_data)  # Debugging line
-                    items = results_response_data['tasks'][0]['result'][0]['items']
-                    
-                    # Populate top 5 results
-                    organic_elements = []
-                    for item in items:
-                        if item.get('type') == 'organic' and len(organic_elements) < 5:
-                            element_dict = {
-                                "title": item.get('title'),
-                                "URL": item.get('url'),
-                                "group_rank": item.get('rank_group'),
-                                'description': item.get('description')
-                            }
-                            organic_elements.append(element_dict)
-
-                    # Display in Streamlit
-                    st.subheader("Top 5 Organic Elements")
-                    st.json(organic_elements)
-            
-            except KeyError as e:
-                st.error(f"Key error occurred: {e}")
-            except IndexError as e:
-                st.error(f"Index error occurred: {e}")
-            except Exception as e:
-                st.error(f"An unexpected error occurred: {e}")
-        else:
-            st.error(f"Error creating task. Code: {task_response.status_code} Message: {task_response.json()['status_message']}")
+# Button to generate content
+if st.button("Generate Content"):
+    with st.spinner("Generating content..."):
+        generated_content = generate_content(keyword)
+        st.markdown(generated_content, unsafe_allow_html=True)
