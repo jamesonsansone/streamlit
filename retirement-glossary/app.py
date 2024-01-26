@@ -52,7 +52,7 @@ if st.button("Generate Data For SEO"):
             results_response_data = results_response.json()
 
             try:
-                results_response.status_code == 200:
+                results_response.status_code == 200
                 results_response_data = results_response.json()
                 st.write("Debugging Response Data:", results_response_data)  # Debugging line
                 items = results_response_data['tasks'][0]['result'][0]['items']
