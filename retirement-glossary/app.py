@@ -51,7 +51,10 @@ if st.button("Generate Data For SEO"):
             results_response = requests.get(results_url, headers=headers)
             results_response_data = results_response.json()
 
-            if results_response.status_code == 200:
+            try:
+                results_response.status_code == 200:
+                results_response_data = results_response.json()
+                st.write("Debugging Response Data:", results_response_data)  # Debugging line
                 items = results_response_data['tasks'][0]['result'][0]['items']
                 
                 # Populate top 5 results
@@ -69,5 +72,19 @@ if st.button("Generate Data For SEO"):
                 # Display in Streamlit
                 st.subheader("Top 5 Organic Elements")
                 st.json(organic_elements)
+        
+                # Rest of your code to process items...
+
+                except KeyError as e:
+                    st.error(f"Key error occurred: {e}")
+                except IndexError as e:
+                    st.error(f"Index error occurred: {e}")
+                except Exception as e:
+                    st.error(f"An unexpected error occurred: {e}")
+
+
+        
+
+        
         else:
             st.error("Error creating task. Code: %d Message: %s" % (task_response.status_code, task_response.json()["status_message"]))
