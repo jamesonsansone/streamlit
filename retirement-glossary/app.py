@@ -6,7 +6,7 @@ import pprint
 from openai import OpenAI
 
 # Streamlit interface for keyword input
-st.title("Retirement Glossary Generator")
+st.title("Content generator using Data For SEO API")
 keyword = st.text_input("Enter a keyword", "")
 
 # Initialize the OpenAI client with the API key from Streamlit secrets
@@ -33,7 +33,7 @@ def fetch_serp_data(keyword):
         }
     })
 
-    task_url = "https://sandbox.dataforseo.com/v3/serp/google/organic/live/advanced"
+    task_url = "https://api.dataforseo.com/v3/serp/google/organic/live/advanced"
     task_response = requests.post(task_url, headers=headers, data=task_post_data)
     task_response_data = task_response.json()
 
