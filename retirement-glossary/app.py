@@ -33,24 +33,15 @@ def fetch_serp_data(keyword):
         }
     })
 
-    task_url = "https://api.dataforseo.com/v3/serp/google/organic/live/advanced/"
+    # Corrected API Endpoint
+    task_url = "https://api.dataforseo.com/v3/serp/google/organic/live/advanced"
     task_response = requests.post(task_url, headers=headers, data=task_post_data)
-    task_response_data = task_response.json()
 
     if task_response.status_code == 200:
-        task_id = task_response_data['tasks'][0]['id']
+        task_response_data = task_response.json()
+        return task_response_data
     else:
-        st.error(f"Error creating task. Code: {task_response.status_code} Message: {task_response_data['status_message']}")
-        return None
-
-    results_url = f"https://api.dataforseo.com/v3/serp/google/organic/live/advanced/{task_id}"
-    results_response = requests.get(results_url, headers=headers)
-    results_response_data = results_response.json()
-
-    if results_response.status_code == 200:
-        return results_response_data
-    else:
-        st.error(f"Error fetching results. Code: {results_response.status_code} Message: {results_response_data['status_message']}")
+        st.error(f"Error creating task. Code: {task_response.status_code} Message: {task_response.text}")
         return None
 
 # Function to generate content using OpenAI
