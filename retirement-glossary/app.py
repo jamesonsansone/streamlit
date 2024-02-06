@@ -50,11 +50,15 @@ def generate_content(keyword, serp_data):
     Generate content based on the given keyword.
     """
     # Extract titles and People Also Ask questions
-    titles = [item.get('title') for item in serp_data['tasks'][0]['result'][0]['items'] if item.get('type') == 'organic'][:5]
-    paa_questions = [item.get('title') for item in serp_data['tasks'][0]['result'][0]['items'] if item.get('type') == 'people_also_ask'][:5]
+    titles = [item.get('title') for item in serp_data['tasks'][0]['result'][0]['items'] if item.get('type') == 'organic' and item.get('title')][:5]
+    paa_questions = [item.get('title') for item in serp_data['tasks'][0]['result'][0]['items'] if item.get('type') == 'people_also_ask' and item.get('title')][:5]
+
+    # Ensure there is data to join
+    titles_str = ', '.join(titles) if titles else 'No titles available'
+    paa_str = ', '.join(paa_questions) if paa_questions else 'No questions available'
 
     # Creating a message string with extracted titles and questions
-    serp_info = f"Titles: {', '.join(titles)}. People Also Ask: {', '.join(paa_questions)}."
+    serp_info = f"Titles: {titles_str}. People Also Ask: {paa_str}."
 
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
