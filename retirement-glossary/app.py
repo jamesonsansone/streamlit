@@ -33,7 +33,7 @@ def fetch_serp_data(keyword):
         }
     })
 
-    task_url = "https://api.dataforseo.com/v3/serp/google/organic/live/advanced"
+    task_url = "https://api.dataforseo.com/v3/serp/google/organic/live/advanced/"
     task_response = requests.post(task_url, headers=headers, data=task_post_data)
     task_response_data = task_response.json()
 
@@ -43,7 +43,7 @@ def fetch_serp_data(keyword):
         st.error(f"Error creating task. Code: {task_response.status_code} Message: {task_response_data['status_message']}")
         return None
 
-    results_url = f"https://sandbox.dataforseo.com/v3/serp/google/organic/task_get/advanced/{task_id}"
+    results_url = f"https://api.dataforseo.com/v3/serp/google/organic/live/advanced/{task_id}"
     results_response = requests.get(results_url, headers=headers)
     results_response_data = results_response.json()
 
