@@ -73,7 +73,11 @@ def generate_content(keyword, serp_data):
             }
         ]
     )
-    return response.choices[0].message.content
+
+    generated_content = response.choices[0].message.content
+
+    return generated_content, serp_info
+
 
 # Button to trigger the Data for SEO API call, generate content and display results
 if st.button("Generate Data For SEO"):
@@ -82,6 +86,8 @@ if st.button("Generate Data For SEO"):
     else:
         serp_data = fetch_serp_data(keyword)
         if serp_data:
-            generated_content = generate_content(keyword, serp_data)
+            generated_content, serp_info = generate_content(keyword, serp_data)
+            st.subheader("Data Used for Content Generation")
+            st.text(serp_info)  # Display the SERP information
             st.subheader("Generated Content")
             st.markdown(generated_content, unsafe_allow_html=True)
