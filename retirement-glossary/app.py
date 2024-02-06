@@ -88,3 +88,5 @@ if st.button("Generate Data For SEO"):
         serp_data = fetch_serp_data(keyword)
         if serp_data:
             generated_content = generate_content(keyword, serp_data)
+            st.subheader("Generated Content")
+            st.markdown(generated_content, unsafe_allow_html=True)
