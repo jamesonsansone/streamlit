@@ -39,6 +39,8 @@ def fetch_serp_data(keyword):
 
     if task_response.status_code == 200:
         task_response_data = task_response.json()
+        # Print the response data for debugging
+        print("API Response:", task_response_data)
         return task_response_data
     else:
         st.error(f"Error creating task. Code: {task_response.status_code} Message: {task_response.text}")
@@ -51,8 +53,12 @@ def generate_content(keyword, serp_data):
     """
     # Extract titles and People Also Ask questions
     titles = [item.get('title') for item in serp_data['tasks'][0]['result'][0]['items'] if item.get('type') == 'organic' and item.get('title')][:5]
+    # Debugging: Print the items to check if 'people_also_ask' data is present
+    print("All items:", serp_data['tasks'][0]['result'][0]['items'])
     paa_questions = [item.get('title') for item in serp_data['tasks'][0]['result'][0]['items'] if item.get('type') == 'people_also_ask' and item.get('title')][:5]
 
+    # Debugging: Print the extracted PAA questions
+    print("Extracted PAA Questions:", paa_questions)
     # Ensure there is data to join
     titles_str = ', '.join(titles) if titles else 'No titles available'
     paa_str = ', '.join(paa_questions) if paa_questions else 'No questions available'
