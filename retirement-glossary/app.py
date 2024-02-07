@@ -6,7 +6,7 @@ import pprint
 from openai import OpenAI
 
 # Streamlit interface for keyword input
-st.title("Content generation using Data For SEO API")
+st.title("Content Outline Using Data For SEO API")
 keyword = st.text_input("Enter a keyword", "")
 
 # Initialize the OpenAI client with the API key from Streamlit secrets
@@ -46,6 +46,7 @@ def fetch_serp_data(keyword):
         st.error(f"Error creating task. Code: {task_response.status_code} Message: {task_response.text}")
         return None
 
+# Function to generate content using OpenAI
 def generate_content(keyword, serp_data):
     """
     Generate content based on the given keyword.
@@ -72,26 +73,37 @@ def generate_content(keyword, serp_data):
     paa_questions = paa_questions[:5]
 
     # Creating a message string with extracted titles and questions
-    serp_info = "Titles: " + ", ".join(titles) if titles else "No titles available"
-    serp_info += ". People Also Ask: " + ", ".join(paa_questions) if paa_questions else "No questions available."
+    titles_str = ", ".join(titles) if titles else "No titles available"
+    paa_str = ", ".join(paa_questions) if paa_questions else "No questions available"
+    serp_info = f"Titles: {titles_str}. People Also Ask: {paa_str}."
 
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
             {
                 "role": "system",
-                "content": "You are a content generation assistant, expert in creating SEO-optimized articles with a focus on SEO. Your client is a FinTech 401(k) retirement benefit provider needing your help to write content for a new retirement glossary. Articles should be structured, authoritative similar to a glossary set of terms. Use Markdown for formatting, with '#' for main titles and '##' for subtitles. Ensure articles are concise, engaging, and no more than 1500 characters. Do not include conclusion paragraphs."
+                "content": """You are a content generation assistant, expert in creating SEO-optimized article outlines with a focus on ranking in search results. Imagine you are Rand Fishkin or John Mueller writing an SEO content outline. Your client is a FinTech 401(k) retirement benefit provider needing your help to write content that answers user's pain points and follows the brand pillars which are accessibility, encouragement, expertise, reassurance, solution-orientation, and education. Approach your content with these key elements:
+
+1. **Accessible and Clear:** "Simplify complex 401(k) concepts. Break down financial terms into easy-to-understand language, making retirement planning accessible to all."
+2. **Encouraging and Supportive:** "Motivate readers to take charge of their retirement planning with positive reinforcement and supportive guidance. Highlight success stories and easy wins."
+3. **Friendly Expertise:** "Leverage your deep SEO and FinTech knowledge to guide readers like a trusted friend would, using layman’s terms and avoiding industry jargon."
+4. **Informative and Reassuring:** "Provide thorough insights into retirement planning, reassuring readers with data-driven advice and answering common concerns with clarity."
+5. **Solution-oriented:** "Focus on practical solutions to the readers' 401(k) queries. Offer step-by-step guides and actionable tips to navigate retirement planning challenges."
+6. **Educational:** "Educate with intent. Use each article to build on the reader's knowledge, covering foundational concepts to advanced strategies in a structured format."
+Use Markdown for formatting, with '#' for main titles and '##' for subtitles. Do not include conclusion paragraphs.  
+"""
             },
             {
                 "role": "user",
-                "content": f"Write an informative and comprehensive article about '{keyword}'. The article should include an introduction to the topic, a detailed breakdown, and incorporate related SEO queries within the text, including {serp_info}. The headlines and subheadings should focus on content semantically related to '{keyword}'. Write content in a way that matches natural language processing. Keep the text between 750 to 1500 characters. Include Markdown-formatted headings. The first heading should be 'What is '{keyword}''."
+                "content": f"Create an informative and comprehensive article about '{keyword}'. Begin with an introduction that provides a clear overview of the topic, ensuring to weave in SEO keywords identified in the titles: {titles_str}. The article should delve into a detailed breakdown of '{keyword}', incorporating related SEO queries and maintaining a focus on content semantically related to '{keyword}'. Utilize natural language processing trends to match the content's tone and structure with current best practices. Aim for a length of 1200 to 1500 characters, using Markdown for formatting. Start with the main heading '## What is {keyword}?' and structure subsequent sections with relevant subheadings based on the titles and the 'People Also Ask' questions. Specifically, include a section towards the end, '## Frequently Asked Questions', to address the People Also Ask questions: {paa_str}. This section should offer actionable insights and answer common queries related to '{keyword}', aligning with the brand pillars of accessibility, encouragement, expertise, reassurance, solution-orientation, and education. Your outline should guide the content writer in creating a narrative that not only educates but also engages the reader, prompting them to explore the topic further."
+
             }
         ]
     )
 
     generated_content = response.choices[0].message.content
 
-    return generated_content, serp_info
+    return generated_content, titles, paa_questions
 
 
 # Button to trigger the Data for SEO API call, generate content and display results
@@ -101,8 +113,16 @@ if st.button("Generate Data For SEO"):
     else:
         serp_data = fetch_serp_data(keyword)
         if serp_data:
-            generated_content, serp_info = generate_content(keyword, serp_data)
+            generated_content, titles, paa_questions = generate_content(keyword, serp_data)
+            
             st.subheader("Data Used for Content Generation")
-            st.text(serp_info)  # Display the SERP information
+            st.write("### Title Tags:")
+            for title in titles:
+                st.text(title)
+            
+            st.write("### People Also Ask Questions:")
+            for question in paa_questions:
+                st.text(question)
+
             st.subheader("Generated Content")
             st.markdown(generated_content, unsafe_allow_html=True)
