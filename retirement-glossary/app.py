@@ -6,7 +6,7 @@ import pprint
 from openai import OpenAI
 
 # Streamlit interface for keyword input
-st.title("Content generator using Data For SEO API")
+st.title("Content generation using Data For SEO API")
 keyword = st.text_input("Enter a keyword", "")
 
 # Initialize the OpenAI client with the API key from Streamlit secrets
@@ -46,25 +46,34 @@ def fetch_serp_data(keyword):
         st.error(f"Error creating task. Code: {task_response.status_code} Message: {task_response.text}")
         return None
 
-# Function to generate content using OpenAI
 def generate_content(keyword, serp_data):
     """
     Generate content based on the given keyword.
     """
-    # Extract titles and People Also Ask questions
-    titles = [item.get('title') for item in serp_data['tasks'][0]['result'][0]['items'] if item.get('type') == 'organic' and item.get('title')][:5]
-    # Debugging: Print the items to check if 'people_also_ask' data is present
-    print("All items:", serp_data['tasks'][0]['result'][0]['items'])
-    paa_questions = [item.get('title') for item in serp_data['tasks'][0]['result'][0]['items'] if item.get('type') == 'people_also_ask' and item.get('title')][:5]
+    # Initialize lists
+    titles = []
+    paa_questions = []
 
-    # Debugging: Print the extracted PAA questions
-    print("Extracted PAA Questions:", paa_questions)
-    # Ensure there is data to join
-    titles_str = ', '.join(titles) if titles else 'No titles available'
-    paa_str = ', '.join(paa_questions) if paa_questions else 'No questions available'
+    # Extract titles and People Also Ask questions
+    items = serp_data['tasks'][0]['result'][0]['items']
+    for item in items:
+        if item.get('type') == 'organic':
+            title = item.get('title')
+            if title:
+                titles.append(title)
+        elif item.get('type') == 'people_also_ask':
+            for paa_item in item.get('items', []):
+                question = paa_item.get('title')
+                if question:
+                    paa_questions.append(question)
+
+    # Limit to first 5 elements
+    titles = titles[:5]
+    paa_questions = paa_questions[:5]
 
     # Creating a message string with extracted titles and questions
-    serp_info = f"Titles: {titles_str}. People Also Ask: {paa_str}."
+    serp_info = "Titles: " + ", ".join(titles) if titles else "No titles available"
+    serp_info += ". People Also Ask: " + ", ".join(paa_questions) if paa_questions else "No questions available."
 
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
