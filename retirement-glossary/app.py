@@ -6,7 +6,7 @@ import pprint
 from openai import OpenAI
 
 # Streamlit interface for keyword input
-st.title("Content Outline Using Data For SEO API")
+st.title("Content generator using Data For SEO API")
 keyword = st.text_input("Enter a keyword", "")
 
 # Initialize the OpenAI client with the API key from Streamlit secrets
@@ -95,7 +95,7 @@ Use Markdown for formatting, with '#' for main titles and '##' for subtitles. Do
             },
             {
                 "role": "user",
-                "content": f"Create an informative and comprehensive article about '{keyword}'. Begin with an introduction that provides a clear overview of the topic, ensuring to weave in SEO keywords identified in the titles: {titles_str}. The article should delve into a detailed breakdown of '{keyword}', incorporating related SEO queries and maintaining a focus on content semantically related to '{keyword}'. Utilize natural language processing trends to match the content's tone and structure with current best practices. Aim for a length of 1200 to 1500 characters, using Markdown for formatting. Start with the main heading '## What is {keyword}?' and structure subsequent sections with relevant subheadings based on the titles and the 'People Also Ask' questions. Specifically, include a section towards the end, '## Frequently Asked Questions', to address the People Also Ask questions: {paa_str}. This section should offer actionable insights and answer common queries related to '{keyword}', aligning with the brand pillars of accessibility, encouragement, expertise, reassurance, solution-orientation, and education. Your outline should guide the content writer in creating a narrative that not only educates but also engages the reader, prompting them to explore the topic further."
+                "content": f"Create an informative and comprehensive article about '{keyword}'. Begin with an introduction that provides a clear overview of the topic. Weave in SEO keywords identified in the titles if you think they make sense to the overarching topic: {titles_str}. The article should delve into a detailed breakdown of '{keyword}', incorporating related SEO queries and maintaining a focus on content semantically related to '{keyword}'. Utilize natural language processing trends to match the content's tone and structure with current best practices. Aim for a length of 1200 to 1500 characters, using Markdown for formatting. Start with the main heading '## What is {keyword}?' and structure subsequent sections with relevant subheadings based on the titles and the 'People Also Ask' questions. Specifically, include a section towards the end, '## Frequently Asked Questions', to address the People Also Ask questions: {paa_str}. This section should offer actionable insights and answer common queries related to '{keyword}', aligning with the brand pillars of accessibility, encouragement, expertise, reassurance, solution-orientation, and education."
 
             }
         ]
