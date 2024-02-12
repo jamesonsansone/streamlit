@@ -35,17 +35,20 @@ def fetch_serp_data(keyword):
 
     # Corrected API Endpoint
     task_url = "https://api.dataforseo.com/v3/serp/google/organic/live/advanced"
-    task_response = requests.post(task_url, headers=headers, data=task_post_data)
-
-    if task_response.status_code == 200:
-        task_response_data = task_response.json()
-        # Print the response data for debugging
-        print("API Response:", task_response_data)
-        return task_response_data
-    else:
-        st.error(f"Error creating task. Code: {task_response.status_code} Message: {task_response.text}")
+    try:
+        task_response = requests.post(task_url, headers=headers, data=task_post_data)
+        if task_response.status_code == 200:
+            task_response_data = task_response.json()
+            print("API Response:", task_response_data)  # Consider logging this instead of printing in production
+            return task_response_data
+        else:
+            st.error(f"Error creating task. Code: {task_response.status_code} Message: {task_response.text}")
+            return None
+    except requests.exceptions.RequestException as e:
+        st.error("Failed to connect to DataForSEO API. Please try again later.")
+        print(e)  # For debugging purposes; consider logging this in production
         return None
-
+ 
 # Function to generate content using OpenAI
 def generate_content(keyword, serp_data):
     """
@@ -95,7 +98,7 @@ Use Markdown for formatting, with '#' for main titles and '##' for subtitles. Do
             },
             {
                 "role": "user",
-                "content": f"Compose a detailed, SEO-optimized article centered on '{keyword}'. Begin with an introduction that sets the stage for the topic, highlighting its relevance and providing a brief overview. Structure the article with clear, logically organized sections, akin to a well-crafted outline: Start with '## Introduction' to introduce '{keyword}', followed by multiple '## Main Section' titles that explore different facets of the topic. Each main section should be further divided into '### Subsections' for in-depth coverage, ensuring a thorough discussion on various aspects related to '{keyword}'. Throughout, weave in SEO keywords identified from {titles_str}, especially in headings and subheadings, to enhance search visibility. The content should aim for a balance between depth and accessibility, making it informative yet easy to digest. Conclude with a '## Frequently Asked Questions' section, addressing common queries with {paa_str}, to provide actionable insights and reinforce the article's value. Ensure the article follows best practices in SEO and content creation, aiming for a length of 1200 to 1500 words, and use Markdown for formatting. The goal is to produce a comprehensive guide on '{keyword}' that aligns with principles of clarity, authority, and reader engagement."
+                "content": f"Create an informative and comprehensive article about '{keyword}'. Begin with an introduction that provides a clear overview of the topic. Weave in SEO keywords identified in the titles if you think they make sense to the overarching topic: {titles_str}. The article should delve into a detailed breakdown of '{keyword}', incorporating related SEO queries and maintaining a focus on content semantically related to '{keyword}'. Utilize natural language processing trends to match the content's tone and structure with current best practices. Aim for a length of 1200 to 1500 characters, using Markdown for formatting. Start with the main heading '## What is {keyword}?' and structure subsequent sections with relevant subheadings based on the titles and the 'People Also Ask' questions. Specifically, include a section towards the end, '## Frequently Asked Questions', to address the People Also Ask questions: {paa_str}. This section should offer actionable insights and answer common queries related to '{keyword}', aligning with the brand pillars of accessibility, encouragement, expertise, reassurance, solution-orientation, and education."
 
             }
         ]
