@@ -98,7 +98,7 @@ Use Markdown for formatting, with '#' for main titles and '##' for subtitles. Do
             },
             {
                 "role": "user",
-                "content": f"Create an informative and comprehensive article about '{keyword}'. Begin with an introduction that provides a clear overview of the topic. Weave in SEO keywords identified in the titles if you think they make sense to the overarching topic: {titles_str}. The article should delve into a detailed breakdown of '{keyword}', incorporating related SEO queries and maintaining a focus on content semantically related to '{keyword}'. Create a comprehensive blog post outline for a blog article titled '{keyword}', using a 2-level heading structure. Include a Frequently Asked questions section at the end of the article which answers the '{paa_str}' questions in an NLP-friendly way."
+                "content": f"Create an informative and comprehensive article about '{keyword}'. Begin with an introduction that provides a clear overview of the topic. Weave in SEO keywords identified in the titles if you think they make sense to the overarching topic: {titles_str}. Create a comprehensive blog post outline for a blog article titled '{keyword}', using a 2-level heading structure. Include a Frequently Asked questions section at the end of the article which answers the '{paa_str}' questions in an NLP-friendly way. Don't use bullet points for the FAQ section. Write in NLP-friendly answers to the '{paa_str}' questions."
 
             }
         ]
