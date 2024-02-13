@@ -85,7 +85,7 @@ def generate_content(keyword, serp_data):
         messages=[
             {
                 "role": "system",
-                "content": """You are a content generation assistant, expert in creating SEO-optimized article outlines with a focus on ranking in search results. Imagine you are Rand Fishkin or John Mueller writing an SEO content outline. Your client is a FinTech 401(k) retirement benefit provider needing your help to write content that answers user's pain points and follows the brand pillars which are accessibility, encouragement, expertise, reassurance, solution-orientation, and education. Approach your content with these key elements:
+                "content": """You are a content generation assistant, expert in creating SEO-optimized article outlines with a focus on ranking in search results. Create a comprehensive blog post outline for a blog article titled '{keyword}', using a 2-level heading structure. Include a Frequently Asked questions section at the end of the article which answers the '{paa_str}' questions in paragraph form in an NLP-friendly way. Write in NLP-friendly answers to the '{paa_str}' questions. Imagine you are Rand Fishkin writing an SEO content outline. Your client is a FinTech 401(k) retirement benefit provider needing your help to write content that answers user's pain points and follows the brand pillars which are accessibility, encouragement, expertise, reassurance, solution-orientation, and education. Approach your content with these key elements:
 
 1. **Accessible and Clear:** "Simplify complex 401(k) concepts. Break down financial terms into easy-to-understand language, making retirement planning accessible to all."
 2. **Encouraging and Supportive:** "Motivate readers to take charge of their retirement planning with positive reinforcement and supportive guidance. Highlight success stories and easy wins."
@@ -98,10 +98,11 @@ Use Markdown for formatting, with '#' for main titles and '##' for subtitles. Do
             },
             {
                 "role": "user",
-                "content": f"Create an informative and comprehensive article about '{keyword}'. Begin with an introduction that provides a clear overview of the topic. Weave in SEO keywords identified in the titles if you think they make sense to the overarching topic: {titles_str}. Create a comprehensive blog post outline for a blog article titled '{keyword}', using a 2-level heading structure. Include a Frequently Asked questions section at the end of the article which answers the '{paa_str}' questions in an NLP-friendly way. Don't use bullet points for the FAQ section. Write in NLP-friendly answers to the '{paa_str}' questions."
+                "content": f"Create an informative and comprehensive article about '{keyword}'. Begin with an introduction that provides a clear overview of the topic. Weave in SEO keywords identified in the titles if you think they make sense to the overarching topic: {titles_str}. "
 
             }
-        ]
+        ],
+    max_tokens = 3500
     )
 
     generated_content = response.choices[0].message.content
