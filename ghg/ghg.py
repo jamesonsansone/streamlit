@@ -31,13 +31,12 @@ with st.form("emissions_form"):
 
         # Headers including the authorization token
         headers = {
-            'Authorization': f'Bearer {API_KEY}',
+            'Authorization': f'Bearer {api_key}',
             'Content-Type': 'application/json'
         }
 
         # Making the POST request to Climatiq API
         response = requests.post(api_endpoint, headers=headers, data=json.dumps(data_payload))
-
         if response.status_code == 200:
             response_data = response.json()
             co2e = response_data.get('co2e', 'N/A')
