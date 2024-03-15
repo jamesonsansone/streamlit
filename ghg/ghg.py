@@ -56,7 +56,3 @@ st.markdown("""
 - Visit Climatiq's [Data Explorer](https://explorer.climatiq.io) to explore more emission factors.
 - Check out Climatiq's [API Documentation](https://docs.climatiq.io) for detailed information on using the API.
 """)
-
-# Running the Streamlit app (this line is needed if running the script directly with Streamlit)
-if __name__ == "__main__":
-    st._main()
