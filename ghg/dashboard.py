@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 # Placeholder functions for CO2e emissions
 def get_co2e_from_energy(energy_consumption):
