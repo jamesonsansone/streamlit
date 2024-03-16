@@ -28,12 +28,6 @@ if submitted:
 
     # Prepare data for the breakdown chart
     data = {'Category': ['Energy Consumption', 'Fleet Travel'], 'CO2e': [energy_co2e, travel_co2e]}
-    df = pd.DataFrame(data)
+    chart_data = pd.DataFrame(data)
 
-    # Generate a pie chart using matplotlib
-    fig, ax = plt.subplots()
-    ax.pie(df['CO2e'], labels=df['Category'], autopct='%1.1f%%', startangle=90)
-    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-
-    # Display the figure using st.pyplot
-    st.pyplot(fig, clear_figure=True)  # Pass the figure to st.pyplot
+    st.line_chart(chart_data)
