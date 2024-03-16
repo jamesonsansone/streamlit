@@ -3,16 +3,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Placeholder function to simulate fetching CO2e emissions from the Climatiq API
+# Placeholder functions for CO2e emissions
 def get_co2e_from_energy(energy_consumption):
-    # Example: assume 0.233 kgCO2e per kWh, a placeholder value
     return energy_consumption * 0.233
 
 def get_co2e_from_travel(miles):
-    # Example: assume 0.404 kgCO2e per mile for fleet travel, a placeholder value
     return miles * 0.404
 
-# Start of Streamlit app
+# Streamlit app start
 st.title("Climate Impact Assessment Tool")
 
 with st.form("emissions_form"):
@@ -32,9 +30,10 @@ if submitted:
     data = {'Category': ['Energy Consumption', 'Fleet Travel'], 'CO2e': [energy_co2e, travel_co2e]}
     df = pd.DataFrame(data)
 
-    # Generate a pie chart
+    # Generate a pie chart using matplotlib
     fig, ax = plt.subplots()
-    ax.pie(df['CO2e'], labels = df['Category'], autopct='%1.1f%%', startangle=90)
-    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    ax.pie(df['CO2e'], labels=df['Category'], autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  # Equal aspect ratio ensures the pie is drawn as a circle.
 
-    st.pyplot(fig)
+    # Display the figure using st.pyplot
+    st.pyplot(fig, clear_figure=True)  # Explicitly clearing the figure after rendering
