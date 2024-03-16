@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # Uncomment this line
 
 # Placeholder functions for CO2e emissions
 def get_co2e_from_energy(energy_consumption):
@@ -30,5 +30,10 @@ if submitted:
     data = {'Category': ['Energy Consumption', 'Fleet Travel'], 'CO2e': [energy_co2e, travel_co2e]}
     df = pd.DataFrame(data)
 
+    # Generate a pie chart using matplotlib
+    fig, ax = plt.subplots()
+    ax.pie(df['CO2e'], labels=df['Category'], autopct='%1.1f%%', startangle=90)
+    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
     # Display the figure using st.pyplot
-    st.pyplot(df, clear_figure=True)  # Explicitly clearing the figure after rendering
+    st.pyplot(fig, clear_figure=True)  # Pass the figure to st.pyplot
