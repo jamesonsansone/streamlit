@@ -31,4 +31,4 @@ if submitted:
     df = pd.DataFrame(data)
 
     # Display the figure using st.pyplot
-    st.pyplot(fig, clear_figure=True)  # Explicitly clearing the figure after rendering
+    st.pyplot(df, clear_figure=True)  # Explicitly clearing the figure after rendering
